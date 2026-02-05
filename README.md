@@ -74,17 +74,38 @@ python paper_trader_api.py SOLUSDT 5m 5002
 
 ### **Backtesting**
 
+Test your strategy on historical data before running live:
+
 ```bash
-# Test strategy on historical data
+# Basic backtest (uses default timeframe and days)
+python backtester.py ETHUSDT
+
+# Specify timeframe and lookback period
 python backtester.py BTCUSDT 15m 30
 
-# Results
+# Test different pairs
+python backtester.py SOLUSDT
+python backtester.py ADAUSDT
+```
+
+**Example Output:**
+
+```
 Initial Capital:  $10,000
 Final Capital:    $17,448
 Net Profit:       +74.49%
 Win Rate:         45.3%
 Profit Factor:    1.27
+Sharpe Ratio:     1.84
+Max Drawdown:     -12.3%
 ```
+
+**Tips:**
+
+- Run backtests on multiple pairs to validate strategy
+- Test different timeframes (5m, 15m, 1h, 4h)
+- Look for consistent win rates above 40%
+- Profit factor should be > 1.2 for profitability
 
 ### **Multiple Bots**
 

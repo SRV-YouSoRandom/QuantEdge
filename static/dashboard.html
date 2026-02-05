@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>QuantEdge Trading Dashboard</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -13,37 +16,48 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: #0a0a0f;
-            color: #e4e4e7;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #fafafa;
+            color: #18181b;
             line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
         }
 
         .container {
             max-width: 1600px;
             margin: 0 auto;
-            padding: 20px;
+            padding: 32px;
         }
 
         /* Header */
         .header {
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-            padding: 24px 32px;
-            border-radius: 16px;
-            margin-bottom: 24px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            background: #ffffff;
+            padding: 32px 40px;
+            border-radius: 12px;
+            margin-bottom: 32px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+            border: 1px solid #e4e4e7;
         }
 
         .header-top {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px;
+            margin-bottom: 32px;
+            padding-bottom: 24px;
+            border-bottom: 1px solid #f4f4f5;
         }
 
         .logo {
             font-size: 24px;
             font-weight: 700;
+            color: #18181b;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .logo-icon {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
@@ -54,11 +68,12 @@
             align-items: center;
             gap: 8px;
             padding: 8px 16px;
-            background: rgba(34, 197, 94, 0.1);
-            border: 1px solid rgba(34, 197, 94, 0.2);
-            border-radius: 20px;
+            background: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            border-radius: 8px;
             font-size: 14px;
             font-weight: 500;
+            color: #15803d;
         }
 
         .status-dot {
@@ -76,74 +91,109 @@
 
         .metrics-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 16px;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 24px;
         }
 
         .metric-card {
-            background: rgba(255, 255, 255, 0.03);
-            padding: 16px;
-            border-radius: 12px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            background: #fafafa;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #e4e4e7;
         }
 
         .metric-label {
             font-size: 13px;
-            color: #a1a1aa;
-            margin-bottom: 4px;
+            color: #71717a;
+            margin-bottom: 8px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .metric-value {
-            font-size: 28px;
+            font-size: 32px;
             font-weight: 700;
             margin-bottom: 4px;
+            color: #18181b;
         }
 
         .metric-change {
-            font-size: 13px;
+            font-size: 14px;
             font-weight: 500;
         }
 
         .positive { color: #22c55e; }
         .negative { color: #ef4444; }
 
+        /* Section Headers */
+        .section-header {
+            margin: 48px 0 24px 0;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #e4e4e7;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #18181b;
+        }
+
+        .section-subtitle {
+            font-size: 14px;
+            color: #71717a;
+            margin-top: 4px;
+        }
+
         /* Grid Layout */
         .dashboard-grid {
             display: grid;
             grid-template-columns: 2fr 1fr;
-            gap: 24px;
-            margin-bottom: 24px;
+            gap: 32px;
+            margin-bottom: 32px;
+        }
+
+        .analytics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 32px;
+            margin-bottom: 32px;
         }
 
         @media (max-width: 1200px) {
             .dashboard-grid {
                 grid-template-columns: 1fr;
             }
+            .analytics-grid {
+                grid-template-columns: 1fr;
+            }
         }
 
         /* Cards */
         .card {
-            background: #16213e;
-            border-radius: 16px;
-            padding: 24px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            background: #ffffff;
+            border-radius: 12px;
+            padding: 32px;
+            border: 1px solid #e4e4e7;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
         }
 
         .card-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px;
+            margin-bottom: 24px;
         }
 
         .card-title {
             font-size: 18px;
             font-weight: 600;
+            color: #18181b;
         }
 
         .card-subtitle {
             font-size: 13px;
-            color: #a1a1aa;
+            color: #71717a;
             margin-top: 4px;
         }
 
@@ -153,44 +203,52 @@
             height: 400px;
         }
 
+        .chart-container-small {
+            position: relative;
+            height: 300px;
+        }
+
         /* Position Card */
         .position-card {
-            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%);
             border: 1px solid rgba(102, 126, 234, 0.2);
-            padding: 20px;
-            border-radius: 12px;
-            margin-bottom: 20px;
+            padding: 24px;
+            border-radius: 8px;
+            margin-bottom: 24px;
         }
 
         .position-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 16px;
+            margin-bottom: 20px;
         }
 
         .position-type {
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 600;
             text-transform: uppercase;
-            padding: 4px 12px;
+            padding: 6px 14px;
             border-radius: 6px;
+            letter-spacing: 0.5px;
         }
 
         .position-long {
-            background: rgba(34, 197, 94, 0.2);
-            color: #22c55e;
+            background: #dcfce7;
+            color: #15803d;
+            border: 1px solid #bbf7d0;
         }
 
         .position-short {
-            background: rgba(239, 68, 68, 0.2);
-            color: #ef4444;
+            background: #fee2e2;
+            color: #dc2626;
+            border: 1px solid #fecaca;
         }
 
         .position-details {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
+            gap: 16px;
         }
 
         .position-detail {
@@ -200,74 +258,72 @@
         }
 
         .position-detail-label {
-            color: #a1a1aa;
+            color: #71717a;
+            font-weight: 500;
+        }
+
+        .position-detail-value {
+            color: #18181b;
+            font-weight: 600;
         }
 
         /* Trades Table */
         .trades-table {
             width: 100%;
             border-collapse: separate;
-            border-spacing: 0 8px;
+            border-spacing: 0;
         }
 
         .trades-table thead th {
             text-align: left;
-            padding: 12px;
-            font-size: 13px;
+            padding: 12px 16px;
+            font-size: 12px;
             font-weight: 600;
-            color: #a1a1aa;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            color: #71717a;
+            border-bottom: 1px solid #e4e4e7;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .trades-table tbody tr {
-            background: rgba(255, 255, 255, 0.02);
-            transition: background 0.2s;
+            background: #ffffff;
+            transition: background 0.15s;
+            border-bottom: 1px solid #f4f4f5;
         }
 
         .trades-table tbody tr:hover {
-            background: rgba(255, 255, 255, 0.05);
+            background: #fafafa;
         }
 
         .trades-table tbody td {
-            padding: 16px 12px;
+            padding: 16px;
             font-size: 14px;
-            border-top: 1px solid rgba(255, 255, 255, 0.03);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
-        }
-
-        .trades-table tbody td:first-child {
-            border-left: 1px solid rgba(255, 255, 255, 0.03);
-            border-radius: 8px 0 0 8px;
-        }
-
-        .trades-table tbody td:last-child {
-            border-right: 1px solid rgba(255, 255, 255, 0.03);
-            border-radius: 0 8px 8px 0;
+            color: #18181b;
         }
 
         .trade-badge {
             display: inline-block;
-            padding: 4px 10px;
+            padding: 4px 12px;
             border-radius: 6px;
             font-size: 12px;
             font-weight: 600;
         }
 
         .trade-long {
-            background: rgba(34, 197, 94, 0.1);
-            color: #22c55e;
+            background: #dcfce7;
+            color: #15803d;
         }
 
         .trade-short {
-            background: rgba(239, 68, 68, 0.1);
-            color: #ef4444;
+            background: #fee2e2;
+            color: #dc2626;
         }
 
         .pattern-badge {
-            background: rgba(102, 126, 234, 0.1);
-            color: #667eea;
-            padding: 4px 8px;
-            border-radius: 4px;
+            background: #ede9fe;
+            color: #6d28d9;
+            padding: 4px 10px;
+            border-radius: 6px;
             font-size: 11px;
             font-weight: 500;
         }
@@ -275,14 +331,14 @@
         /* Loading */
         .loading {
             text-align: center;
-            padding: 40px;
-            color: #a1a1aa;
+            padding: 60px 20px;
+            color: #71717a;
         }
 
         .spinner {
             width: 40px;
             height: 40px;
-            border: 3px solid rgba(102, 126, 234, 0.1);
+            border: 3px solid #e4e4e7;
             border-top-color: #667eea;
             border-radius: 50%;
             animation: spin 1s linear infinite;
@@ -297,38 +353,48 @@
         .indicators-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
+            gap: 16px;
         }
 
         .indicator {
-            background: rgba(255, 255, 255, 0.02);
-            padding: 12px;
+            background: #fafafa;
+            padding: 16px;
             border-radius: 8px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            border: 1px solid #e4e4e7;
         }
 
         .indicator-name {
             font-size: 12px;
-            color: #a1a1aa;
-            margin-bottom: 4px;
+            color: #71717a;
+            margin-bottom: 8px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .indicator-value {
-            font-size: 18px;
+            font-size: 20px;
             font-weight: 600;
+            color: #18181b;
         }
 
         /* Empty state */
         .empty-state {
             text-align: center;
             padding: 60px 20px;
-            color: #a1a1aa;
+            color: #71717a;
         }
 
         .empty-state-icon {
             font-size: 48px;
             margin-bottom: 16px;
             opacity: 0.5;
+        }
+
+        .empty-state-text {
+            font-size: 14px;
+            margin-top: 8px;
+            color: #a1a1aa;
         }
     </style>
 </head>
@@ -337,7 +403,10 @@
         <!-- Header -->
         <div class="header">
             <div class="header-top">
-                <div class="logo">⚡ QuantEdge</div>
+                <div class="logo">
+                    <span class="logo-icon">⚡</span>
+                    <span>QuantEdge</span>
+                </div>
                 <div class="status-badge">
                     <div class="status-dot"></div>
                     <span id="bot-status">Live Trading</span>
@@ -352,18 +421,18 @@
                 </div>
                 <div class="metric-card">
                     <div class="metric-label">Symbol</div>
-                    <div class="metric-value" style="font-size: 20px;" id="symbol">BTC/USDT</div>
-                    <div class="metric-change" style="color: #a1a1aa;" id="timeframe">15m</div>
+                    <div class="metric-value" style="font-size: 24px;" id="symbol">BTC/USDT</div>
+                    <div class="metric-change" style="color: #71717a;" id="timeframe">15m</div>
                 </div>
                 <div class="metric-card">
                     <div class="metric-label">Win Rate</div>
                     <div class="metric-value" id="win-rate">0%</div>
-                    <div class="metric-change" style="color: #a1a1aa;"><span id="total-trades">0</span> trades</div>
+                    <div class="metric-change" style="color: #71717a;"><span id="total-trades">0</span> trades</div>
                 </div>
                 <div class="metric-card">
                     <div class="metric-label">Profit Factor</div>
                     <div class="metric-value" id="profit-factor">0.00</div>
-                    <div class="metric-change" style="color: #a1a1aa;">Expectancy: $<span id="expectancy">0</span></div>
+                    <div class="metric-change" style="color: #71717a;">Expectancy: $<span id="expectancy">0</span></div>
                 </div>
             </div>
         </div>
@@ -386,7 +455,7 @@
                 </div>
 
                 <!-- Recent Trades -->
-                <div class="card" style="margin-top: 24px;">
+                <div class="card" style="margin-top: 32px;">
                     <div class="card-header">
                         <div class="card-title">Recent Trades</div>
                     </div>
@@ -400,7 +469,7 @@
                                     <th>Entry</th>
                                     <th>Exit</th>
                                     <th>P&L</th>
-                                    <th>Exit</th>
+                                    <th>Reason</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -422,18 +491,18 @@
             <div>
                 <!-- Current Position -->
                 <div class="card" id="position-card">
-                    <div class="card-title" style="margin-bottom: 16px;">Current Position</div>
+                    <div class="card-title" style="margin-bottom: 20px;">Current Position</div>
                     <div class="empty-state" id="no-position">
                         <div class="empty-state-icon">📊</div>
                         <div>No open position</div>
-                        <div style="font-size: 13px; margin-top: 8px;">Scanning for signals...</div>
+                        <div class="empty-state-text">Scanning for signals...</div>
                     </div>
                     <div id="position-details" style="display: none;"></div>
                 </div>
 
                 <!-- Indicators -->
-                <div class="card" style="margin-top: 24px;">
-                    <div class="card-title" style="margin-bottom: 16px;">Live Indicators</div>
+                <div class="card" style="margin-top: 32px;">
+                    <div class="card-title" style="margin-bottom: 20px;">Live Indicators</div>
                     <div class="indicators-grid">
                         <div class="indicator">
                             <div class="indicator-name">Price</div>
@@ -453,23 +522,91 @@
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
 
-                <!-- Performance Stats -->
-                <div class="card" style="margin-top: 24px;">
-                    <div class="card-title" style="margin-bottom: 16px;">Performance</div>
-                    <div class="chart-container" style="height: 250px;">
-                        <canvas id="pnl-chart"></canvas>
+        <!-- Analytics Section -->
+        <div class="section-header">
+            <div class="section-title">Advanced Analytics</div>
+            <div class="section-subtitle">Detailed performance metrics and distributions</div>
+        </div>
+
+        <div class="analytics-grid">
+            <!-- Drawdown Chart -->
+            <div class="card">
+                <div class="card-header">
+                    <div>
+                        <div class="card-title">Drawdown</div>
+                        <div class="card-subtitle">Peak-to-trough equity decline</div>
                     </div>
+                </div>
+                <div class="chart-container-small">
+                    <canvas id="drawdown-chart"></canvas>
+                </div>
+            </div>
+
+            <!-- Cumulative PnL Chart -->
+            <div class="card">
+                <div class="card-header">
+                    <div>
+                        <div class="card-title">Cumulative P&L</div>
+                        <div class="card-subtitle">Running profit/loss total</div>
+                    </div>
+                </div>
+                <div class="chart-container-small">
+                    <canvas id="cumulative-pnl-chart"></canvas>
+                </div>
+            </div>
+
+            <!-- PnL Distribution Chart -->
+            <div class="card">
+                <div class="card-header">
+                    <div>
+                        <div class="card-title">P&L Distribution</div>
+                        <div class="card-subtitle">Trade outcome distribution</div>
+                    </div>
+                </div>
+                <div class="chart-container-small">
+                    <canvas id="pnl-distribution-chart"></canvas>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        let equityChart, pnlChart;
+        let equityChart, drawdownChart, cumulativePnlChart, pnlDistributionChart;
         
         // Initialize charts
         function initCharts() {
+            const chartDefaults = {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        mode: 'index',
+                        intersect: false,
+                        backgroundColor: 'rgba(255, 255, 255, 0.95)',
+                        titleColor: '#18181b',
+                        bodyColor: '#18181b',
+                        borderColor: '#e4e4e7',
+                        borderWidth: 1,
+                        padding: 12,
+                        displayColors: false
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: { color: '#f4f4f5', drawBorder: false },
+                        ticks: { color: '#71717a', font: { size: 11 } }
+                    },
+                    y: {
+                        grid: { color: '#f4f4f5', drawBorder: false },
+                        ticks: { color: '#71717a', font: { size: 11 } }
+                    }
+                }
+            };
+
             // Equity Chart
             const equityCtx = document.getElementById('equity-chart').getContext('2d');
             equityChart = new Chart(equityCtx, {
@@ -483,62 +620,80 @@
                         backgroundColor: 'rgba(102, 126, 234, 0.1)',
                         fill: true,
                         tension: 0.4,
-                        borderWidth: 2
+                        borderWidth: 2,
+                        pointRadius: 0,
+                        pointHoverRadius: 4
                     }]
                 },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: { display: false },
-                        tooltip: {
-                            mode: 'index',
-                            intersect: false,
-                            backgroundColor: 'rgba(22, 33, 62, 0.9)',
-                            titleColor: '#e4e4e7',
-                            bodyColor: '#e4e4e7',
-                            borderColor: 'rgba(102, 126, 234, 0.5)',
-                            borderWidth: 1
-                        }
-                    },
-                    scales: {
-                        x: {
-                            grid: { color: 'rgba(255, 255, 255, 0.05)' },
-                            ticks: { color: '#a1a1aa' }
-                        },
-                        y: {
-                            grid: { color: 'rgba(255, 255, 255, 0.05)' },
-                            ticks: { color: '#a1a1aa' }
-                        }
-                    }
-                }
+                options: chartDefaults
             });
 
-            // P&L Distribution Chart
-            const pnlCtx = document.getElementById('pnl-chart').getContext('2d');
-            pnlChart = new Chart(pnlCtx, {
+            // Drawdown Chart
+            const drawdownCtx = document.getElementById('drawdown-chart').getContext('2d');
+            drawdownChart = new Chart(drawdownCtx, {
+                type: 'line',
+                data: {
+                    labels: [],
+                    datasets: [{
+                        label: 'Drawdown %',
+                        data: [],
+                        borderColor: '#ef4444',
+                        backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                        fill: true,
+                        tension: 0.4,
+                        borderWidth: 2,
+                        pointRadius: 0,
+                        pointHoverRadius: 4
+                    }]
+                },
+                options: chartDefaults
+            });
+
+            // Cumulative PnL Chart
+            const cumulativePnlCtx = document.getElementById('cumulative-pnl-chart').getContext('2d');
+            cumulativePnlChart = new Chart(cumulativePnlCtx, {
+                type: 'line',
+                data: {
+                    labels: [],
+                    datasets: [{
+                        label: 'Cumulative P&L',
+                        data: [],
+                        borderColor: '#22c55e',
+                        backgroundColor: 'rgba(34, 197, 94, 0.1)',
+                        fill: true,
+                        tension: 0.4,
+                        borderWidth: 2,
+                        pointRadius: 0,
+                        pointHoverRadius: 4
+                    }]
+                },
+                options: chartDefaults
+            });
+
+            // PnL Distribution Chart
+            const pnlDistCtx = document.getElementById('pnl-distribution-chart').getContext('2d');
+            pnlDistributionChart = new Chart(pnlDistCtx, {
                 type: 'bar',
                 data: {
-                    labels: ['Wins', 'Losses'],
+                    labels: [],
                     datasets: [{
-                        data: [0, 0],
-                        backgroundColor: ['rgba(34, 197, 94, 0.8)', 'rgba(239, 68, 68, 0.8)']
+                        label: 'Frequency',
+                        data: [],
+                        backgroundColor: 'rgba(102, 126, 234, 0.8)',
+                        borderColor: '#667eea',
+                        borderWidth: 1
                     }]
                 },
                 options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: { display: false }
-                    },
+                    ...chartDefaults,
                     scales: {
                         x: {
                             grid: { display: false },
-                            ticks: { color: '#a1a1aa' }
+                            ticks: { color: '#71717a', font: { size: 10 }, maxRotation: 45 }
                         },
                         y: {
-                            grid: { color: 'rgba(255, 255, 255, 0.05)' },
-                            ticks: { color: '#a1a1aa' }
+                            grid: { color: '#f4f4f5', drawBorder: false },
+                            ticks: { color: '#71717a', font: { size: 11 } }
                         }
                     }
                 }
@@ -564,13 +719,6 @@
                     document.getElementById('total-trades').textContent = status.performance.total_trades;
                     document.getElementById('profit-factor').textContent = status.performance.profit_factor.toFixed(2);
                     document.getElementById('expectancy').textContent = status.performance.expectancy.toFixed(0);
-                    
-                    // Update P&L chart
-                    pnlChart.data.datasets[0].data = [
-                        status.performance.winning_trades,
-                        status.performance.losing_trades
-                    ];
-                    pnlChart.update();
                 }
                 
                 // Update position
@@ -590,32 +738,32 @@
                                 <div class="position-type ${pos.type === 'long' ? 'position-long' : 'position-short'}">
                                     ${pos.type.toUpperCase()}
                                 </div>
-                                <div style="font-size: 12px; color: #a1a1aa;">${pos.pattern}</div>
+                                <div style="font-size: 12px; color: #71717a;">${pos.pattern}</div>
                             </div>
                             <div class="position-details">
                                 <div class="position-detail">
                                     <span class="position-detail-label">Entry</span>
-                                    <span>$${pos.entry_price.toFixed(2)}</span>
+                                    <span class="position-detail-value">$${pos.entry_price.toFixed(2)}</span>
                                 </div>
                                 <div class="position-detail">
                                     <span class="position-detail-label">Current</span>
-                                    <span>$${status.indicators.price.toFixed(2)}</span>
+                                    <span class="position-detail-value">$${status.indicators.price.toFixed(2)}</span>
                                 </div>
                                 <div class="position-detail">
                                     <span class="position-detail-label">Stop Loss</span>
-                                    <span>$${pos.stop_loss.toFixed(2)}</span>
+                                    <span class="position-detail-value">$${pos.stop_loss.toFixed(2)}</span>
                                 </div>
                                 <div class="position-detail">
                                     <span class="position-detail-label">Take Profit</span>
-                                    <span>$${pos.take_profit.toFixed(2)}</span>
+                                    <span class="position-detail-value">$${pos.take_profit.toFixed(2)}</span>
                                 </div>
                                 <div class="position-detail">
                                     <span class="position-detail-label">Size</span>
-                                    <span>${pos.size.toFixed(4)}</span>
+                                    <span class="position-detail-value">${pos.size.toFixed(4)}</span>
                                 </div>
                                 <div class="position-detail">
                                     <span class="position-detail-label">Unrealized P&L</span>
-                                    <span class="${pnlPct >= 0 ? 'positive' : 'negative'}">
+                                    <span class="position-detail-value ${pnlPct >= 0 ? 'positive' : 'negative'}">
                                         $${unrealizedPnl.toFixed(2)} (${pnlPct.toFixed(2)}%)
                                     </span>
                                 </div>
@@ -642,7 +790,38 @@
                 if (equity.length > 0) {
                     equityChart.data.labels = equity.map(e => new Date(e.timestamp).toLocaleTimeString());
                     equityChart.data.datasets[0].data = equity.map(e => e.equity);
-                    equityChart.update();
+                    equityChart.update('none');
+                }
+                
+                // Get analytics data
+                const analyticsRes = await fetch('/api/analytics');
+                const analytics = await analyticsRes.json();
+                
+                // Update drawdown chart
+                if (analytics.drawdown && analytics.drawdown.length > 0) {
+                    drawdownChart.data.labels = analytics.drawdown.map(d => new Date(d.timestamp).toLocaleTimeString());
+                    drawdownChart.data.datasets[0].data = analytics.drawdown.map(d => d.drawdown);
+                    drawdownChart.update('none');
+                }
+                
+                // Update cumulative PnL chart
+                if (analytics.cumulative_pnl && analytics.cumulative_pnl.length > 0) {
+                    cumulativePnlChart.data.labels = analytics.cumulative_pnl.map(d => new Date(d.timestamp).toLocaleTimeString());
+                    cumulativePnlChart.data.datasets[0].data = analytics.cumulative_pnl.map(d => d.cumulative_pnl);
+                    
+                    // Change color based on overall P&L
+                    const finalPnl = analytics.cumulative_pnl[analytics.cumulative_pnl.length - 1].cumulative_pnl;
+                    cumulativePnlChart.data.datasets[0].borderColor = finalPnl >= 0 ? '#22c55e' : '#ef4444';
+                    cumulativePnlChart.data.datasets[0].backgroundColor = finalPnl >= 0 ? 'rgba(34, 197, 94, 0.1)' : 'rgba(239, 68, 68, 0.1)';
+                    
+                    cumulativePnlChart.update('none');
+                }
+                
+                // Update PnL distribution chart
+                if (analytics.pnl_distribution && analytics.pnl_distribution.bins.length > 0) {
+                    pnlDistributionChart.data.labels = analytics.pnl_distribution.bins;
+                    pnlDistributionChart.data.datasets[0].data = analytics.pnl_distribution.frequencies;
+                    pnlDistributionChart.update('none');
                 }
                 
                 // Get trades
@@ -661,7 +840,7 @@
                             <td class="${trade.pnl >= 0 ? 'positive' : 'negative'}">
                                 $${trade.pnl.toFixed(2)} (${trade.pnl_percent.toFixed(2)}%)
                             </td>
-                            <td style="font-size: 12px; color: #a1a1aa;">${trade.reason}</td>
+                            <td style="font-size: 12px; color: #71717a;">${trade.reason}</td>
                         </tr>
                     `).join('');
                 }

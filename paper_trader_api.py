@@ -1,4 +1,5 @@
 import pandas as pd
+import numpy as np
 from datetime import datetime
 import ccxt
 import time
@@ -240,11 +241,86 @@ class PaperTradingBotAPI(TradingEngine):
             conn.close()
             return jsonify(df.to_dict('records'))
         
+        @self.app.route('/api/analytics')
+        def get_analytics():
+            """Get analytics data for advanced charts"""
+            analytics = {
+                'drawdown': self.calculate_drawdown(),
+                'pnl_distribution': self.calculate_pnl_distribution(),
+                'cumulative_pnl': self.calculate_cumulative_pnl()
+            }
+            return jsonify(analytics)
+        
         @self.app.route('/api/stop', methods=['POST'])
         def stop_bot():
             """Stop the trading bot"""
             self.is_running = False
             return jsonify({'status': 'stopped'})
+    
+    def calculate_drawdown(self):
+        """Calculate drawdown data from equity curve"""
+        try:
+            conn = sqlite3.connect(self.db_path)
+            df = pd.read_sql_query('SELECT timestamp, equity FROM equity_curve ORDER BY id', conn)
+            conn.close()
+            
+            if len(df) == 0:
+                return []
+            
+            # Calculate running maximum and drawdown
+            df['peak'] = df['equity'].cummax()
+            df['drawdown'] = ((df['equity'] - df['peak']) / df['peak']) * 100
+            
+            # Return last 200 points for performance
+            result = df.tail(200).to_dict('records')
+            return result
+        except Exception as e:
+            print(f"Error calculating drawdown: {e}")
+            return []
+    
+    def calculate_pnl_distribution(self):
+        """Calculate PnL distribution for histogram"""
+        try:
+            if len(self.trades) == 0:
+                return {'bins': [], 'frequencies': []}
+            
+            trades_df = pd.DataFrame(self.trades)
+            pnl_values = trades_df['pnl'].values
+            
+            # Create bins
+            num_bins = min(20, len(pnl_values))
+            hist, bin_edges = np.histogram(pnl_values, bins=num_bins)
+            
+            # Format bin labels
+            bin_labels = [f"${bin_edges[i]:.0f}" for i in range(len(bin_edges)-1)]
+            
+            return {
+                'bins': bin_labels,
+                'frequencies': hist.tolist(),
+                'bin_edges': bin_edges.tolist()
+            }
+        except Exception as e:
+            print(f"Error calculating PnL distribution: {e}")
+            return {'bins': [], 'frequencies': []}
+    
+    def calculate_cumulative_pnl(self):
+        """Calculate cumulative PnL over time"""
+        try:
+            if len(self.trades) == 0:
+                return []
+            
+            trades_df = pd.DataFrame(self.trades)
+            trades_df['cumulative_pnl'] = trades_df['pnl'].cumsum()
+            
+            result = [{
+                'timestamp': trade['exit_time'],
+                'cumulative_pnl': float(cum_pnl)
+            } for trade, cum_pnl in zip(self.trades, trades_df['cumulative_pnl'])]
+            
+            return result
+        except Exception as e:
+            print(f"Error calculating cumulative PnL: {e}")
+            return []
     
     def run_trading_loop(self, update_interval=60):
         """Main trading loop"""
