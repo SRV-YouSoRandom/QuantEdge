@@ -326,6 +326,10 @@ class PaperTradingBotAPI(TradingEngine):
         print("\n🛑 Bot stopped")
         self.update_bot_status()
     
+    def run(self, update_interval=60):
+        """Implementation of abstract run() method - starts the bot"""
+        self.start(update_interval)
+    
     def start(self, update_interval=60):
         """Start bot with web server"""
         # Start trading in separate thread
