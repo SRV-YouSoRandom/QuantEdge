@@ -1,0 +1,20 @@
+# VENV
+venv/
+
+# DB
+trading_data.db
+trading_data.db-journal
+
+# State
+trading_state.json
+
+# Logs
+logs/
+
+# Python cache
+__pycache__/
+*.pyc
+
+# OS files
+.DS_Store
+Thumbs.db
